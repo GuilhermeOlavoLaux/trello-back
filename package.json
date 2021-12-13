@@ -1,0 +1,35 @@
+{
+  "name": "trello-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuilhermeOlavoLaux/trello-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GuilhermeOlavoLaux/trello-back/issues"
+  },
+  "homepage": "https://github.com/GuilhermeOlavoLaux/trello-back#readme",
+  "dependencies": {
+    "@types/mongoose": "^5.11.97",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.1.1",
+    "typescript": "^4.5.3"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.3",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "uuid": "^8.3.2"
+  }
+}
