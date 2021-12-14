@@ -2,7 +2,6 @@ import { Error } from "mongoose"
 
 const mongoose = require('mongoose')
 
-//conect to db
 function connectToDataBase() {
   mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true

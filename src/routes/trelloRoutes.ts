@@ -1,7 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const trelloController = require('../controller/trelloController')
+const userController = require('../controller/userController')
+const userMidllewares = require('../midllewares/userMidllewares')
 
-router.post('/createUser', trelloController.createUser)
+router.get('/users', userController.getUsers)
+
+router.get('/user', userController.getUser)
+
+router.post('/createUser', userMidllewares.validateUserCreation, userController.createUser)
 
 export = router

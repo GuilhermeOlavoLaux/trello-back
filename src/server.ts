@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const routes = require('./routes/trelloRoutes')
 
 
-
-
 const conectToDatabase = require('./database')
 const cors = require('cors')
 require("dotenv").config()
