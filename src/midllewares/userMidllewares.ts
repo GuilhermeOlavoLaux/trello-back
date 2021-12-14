@@ -21,7 +21,7 @@ export = {
       })
 
       if (userCreationFlag) {
-        return response.status(400).json({ error: 'aaaaaaaaaa' })
+        return response.status(400).json({rror: 'This user already exists' })
       }
 
       next()
