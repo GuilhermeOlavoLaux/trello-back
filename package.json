@@ -20,6 +20,7 @@
   "homepage": "https://github.com/GuilhermeOlavoLaux/trello-back#readme",
   "dependencies": {
     "@types/mongoose": "^5.11.97",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
