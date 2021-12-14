@@ -5,18 +5,24 @@ export = {
     try {
       const { userName, password, tasks } = request.body
 
-      const users = await User.find()
-
-
       if (!userName || !password || !tasks) {
         return response.status(400).json({ error: 'Missing name, password or tasks' })
       }
 
+      const users = await User.find()
+
+      let userCreationFlag = false
+
       users.forEach((user: IUser) => {
         if (user.userName === userName) {
-          return response.status(400).json({ error: 'This user already exists' })
+          console.log(userName)
+          userCreationFlag = true
         }
       })
+
+      if (userCreationFlag) {
+        return response.status(400).json({ error: 'aaaaaaaaaa' })
+      }
 
       next()
     } catch (error: any) {
