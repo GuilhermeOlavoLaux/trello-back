@@ -1,6 +1,7 @@
 const { v4: uuid } = require('uuid')
 const User = require('../model/User')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 import express = require('express')
 
 interface IUser {
@@ -26,23 +27,29 @@ module.exports = {
     }
   },
 
-  async getUser(request: express.Request, response: express.Response) {
+  async login(request: express.Request, response: express.Response) {
     const { userName, password } = request.body
     try {
-      if (!userName || !password) {
-        return response.status(400).json({ error: 'Missing name or password' })
+      const users = await User.find()
+
+      const user = users.find((user: IUser) => user.userName === userName)
+
+      if (user === null) {
+        return response.status(400).send('Cannot find user')
+      } else if (await bcrypt.compare(password, user.password)) {
+        const token = jwt.sign(
+          {
+            user_id: user._id,
+            user_login: user.userName
+          },
+          'teste',
+          {
+            expiresIn: '1h'
+          }
+        )
+        return response.status(200).json({ token })
       } else {
-        const users = await User.find()
-
-        const user = users.find((user: IUser) => user.userName === userName)
-
-        if (user === null) {
-          return response.status(400).send('Cannot find user')
-        } else if (await bcrypt.compare(password, user.password)) {
-          return response.status(200).json({ user })
-        } else {
-          return response.status(400).send('Cannot find user')
-        }
+        return response.status(400).send('Wrong password')
       }
     } catch (error: any) {
       response.status(500).json({ error: error.message })
@@ -62,9 +69,6 @@ module.exports = {
       }
     })
 
-    if (!userName || !password) {
-      return response.status(400).json({ error: 'Missing name, password or tasks' })
-    }
     if (userCreationFlag) {
       return response.status(400).json({ rror: 'This user already exists' })
     } else {
@@ -82,19 +86,5 @@ module.exports = {
         return response.status(400).json({ error: error.message })
       }
     }
-  },
-
-  async login(request: express.Request, response: express.Response) {
-    const { userName, password, tasks } = request.body
-
-    const users = await User.find()
-
-    let userCreationFlag = false
-
-    users.forEach((user: IUser) => {
-      if (user.userName === userName) {
-        userCreationFlag = true
-      }
-    })
   }
 }

@@ -5,8 +5,8 @@ const userMidllewares = require('../midllewares/userMiddlewares')
 
 router.get('/users', userController.getUsers)
 
-router.get('/user', userController.getUser)
+router.get('/login', userMidllewares.validateUserAndPassword, userController.login)
 
-router.post('/createUser', userController.createUser)
+router.post('/createUser', userMidllewares.validateUserAndPassword, userController.createUser)
 
 export = router
