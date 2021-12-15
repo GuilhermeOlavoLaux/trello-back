@@ -1,12 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const userController = require('../controller/userController')
-const userMidllewares = require('../midllewares/userMiddlewares')
+const { UserMiddlewares } = require('../midllewares/userMiddlewares')
+import { UserController } from '../controller/user/UserController'
+
+const userController = new UserController()
+
+const userMiddlewares = new UserMiddlewares()
 
 router.get('/users', userController.getUsers)
 
-router.get('/login', userMidllewares.validateUserAndPassword, userController.login)
+router.post('/login', userMiddlewares.validateUserAndPassword, userMiddlewares.auth)
 
-router.post('/createUser', userMidllewares.validateUserAndPassword, userController.createUser)
+router.post('/createUser', userController.createUser)
 
 export = router
