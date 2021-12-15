@@ -1,12 +1,12 @@
 import { v4 as uuid } from 'uuid'
-import User from '../../model/user'
+import User from '../../model/User'
 
 const bcrypt = require('bcrypt')
 
 import jwt from 'jsonwebtoken'
 
 import express from 'express'
-import { IUser } from '../../types'
+import { IUser } from '../../Types'
 
 class UserController {
   async getUsers(request: express.Request, response: express.Response) {
@@ -23,18 +23,28 @@ class UserController {
       const users = await User.find()
 
       const user = users.find((user: IUser) => user.userName === userName)
+      if (user === null || user === undefined) {
+        throw new Error('User not found')
+      }
 
-      const token = jwt.sign(
-        {
-          user_id: user._id,
-          user_login: user.userName
-        },
-        'teste',
-        {
-          expiresIn: '1h'
-        }
-      )
-      return token
+      if (await bcrypt.compare(password, user.password)) {
+        console.log('entrei no lugar2')
+
+        const token = jwt.sign(
+          {
+            user_id: user._id,
+            user_login: user.userName
+          },
+          'teste',
+          {
+            expiresIn: '1h'
+          }
+        )
+
+        return token
+      } else {
+        throw new Error('Wrong password')
+      }
     } catch (error: any) {
       throw new Error(error)
     }
