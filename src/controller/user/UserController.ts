@@ -5,11 +5,12 @@ const bcrypt = require('bcrypt')
 
 import jwt from 'jsonwebtoken'
 
-import express from 'express'
+import express, { Request, Response } from 'express'
+
 import { IUser } from '../../Types'
 
 class UserController {
-  async getUsers(request: express.Request, response: express.Response) {
+  async getUsers(request: Request, response: Response) {
     try {
       const users = await User.find()
       return response.status(200).json({ users })
@@ -26,22 +27,18 @@ class UserController {
       if (user === null || user === undefined) {
         throw new Error('User not found')
       }
-
       if (await bcrypt.compare(password, user.password)) {
-        console.log('entrei no lugar2')
-
         const token = jwt.sign(
           {
             user_id: user._id,
             user_login: user.userName
           },
-          'teste',
+          '1a7052a6-c711-4c8c-9107-cdc76700b630',
           {
             expiresIn: '1h'
           }
         )
-
-        return token
+        return {token}
       } else {
         throw new Error('Wrong password')
       }
@@ -50,7 +47,7 @@ class UserController {
     }
   }
 
-  async createUser(request: express.Request, response: express.Response) {
+  async createUser(request: Request, response: Response) {
     const { userName, password, tasks } = request.body
 
     const users = await User.find()
