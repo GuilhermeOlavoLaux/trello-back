@@ -1,21 +1,54 @@
-const User = require('../model/User')
-import express = require('express')
+import express, { Request, Response, NextFunction } from 'express'
+import { UserController } from '../controller/user/UserController'
+import { verify } from 'jsonwebtoken'
 
-export = {
-  async validateUserAndPassword(
-    request: express.Request,
-    response: express.Response,
-    next: express.NextFunction
-  ) {
+const bcrypt = require('bcrypt')
+
+class UserMiddlewares {
+  async validateUserAndPassword(request: Request, response: Response, next: NextFunction) {
     try {
       const { userName, password } = request.body
 
       if (!userName || !password) {
         return response.status(400).json({ error: 'Missing name or password' })
+      } else {
+        return next()
       }
-      next()
     } catch (error: any) {
       return response.status(500).json({ error: error.message })
     }
   }
+
+  async tokenHandler(request: Request, response: Response) {
+    try {
+      const { userName, password } = request.body
+      const userController = new UserController()
+
+      const token = await userController.login(userName, password)
+
+      return response.json(token)
+    } catch (error: any) {
+      return response.status(500).json({ error: error.message })
+    }
+  }
+  async auth(request: Request, response: Response, next: NextFunction) {
+    const authToken = request.headers.authorization
+
+    if (!authToken) {
+      return response.status(401).json({ message: 'Token is missing' })
+    }
+
+    const [, token] = authToken.split(' ')
+
+    try {
+      verify(token, '1a7052a6-c711-4c8c-9107-cdc76700b630')
+      return next()
+    } catch (error) {
+      return response.status(401).json({
+        message: 'Token invalid'
+      })
+    }
+  }
 }
+
+export { UserMiddlewares }

@@ -1,65 +1,60 @@
-const { v4: uuid } = require('uuid')
-const User = require('../model/User')
+import { v4 as uuid } from 'uuid'
+import User from '../../model/User'
+
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-import express = require('express')
 
-interface IUser {
-  _id: string
-  userName: string
-  password: string
-  tasks: [Itask]
-}
+import jwt from 'jsonwebtoken'
 
-interface Itask {
-  taskId: string
-  name: string
-  description: string
-}
+import express, { Request, Response } from 'express'
 
-module.exports = {
-  async getUsers(request: express.Request, response: express.Response) {
+import { IUser } from '../../Types'
+
+class UserController {
+  async getUsers(request: Request, response: Response) {
     try {
       const users = await User.find()
       return response.status(200).json({ users })
     } catch (error: any) {
       response.status(500).json({ error: error.message })
     }
-  },
+  }
 
-  async login(request: express.Request, response: express.Response) {
-    const { userName, password } = request.body
+  async login(userName: string, password: string) {
     try {
       const users = await User.find()
 
       const user = users.find((user: IUser) => user.userName === userName)
-
-      if (user === null) {
-        return response.status(400).send('Cannot find user')
-      } else if (await bcrypt.compare(password, user.password)) {
+      if (user === null || user === undefined) {
+        throw new Error('User not found')
+      }
+      if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign(
           {
             user_id: user._id,
             user_login: user.userName
           },
-          'teste',
+          '1a7052a6-c711-4c8c-9107-cdc76700b630',
           {
             expiresIn: '1h'
           }
         )
-        return response.status(200).json({ token })
+        return {token}
       } else {
-        return response.status(400).send('Wrong password')
+        throw new Error('Wrong password')
       }
     } catch (error: any) {
-      response.status(500).json({ error: error.message })
+      throw new Error(error)
     }
-  },
+  }
 
-  async createUser(request: express.Request, response: express.Response) {
+  async createUser(request: Request, response: Response) {
     const { userName, password, tasks } = request.body
 
     const users = await User.find()
+
+    if (!userName || !password) {
+      return response.status(400).json({ error: 'Missing name or password' })
+    }
 
     let userCreationFlag = false
 
@@ -88,3 +83,5 @@ module.exports = {
     }
   }
 }
+
+export { UserController }
