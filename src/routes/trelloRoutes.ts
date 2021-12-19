@@ -13,6 +13,10 @@ router.post('/login', userMiddlewares.validateUserAndPassword, userMiddlewares.t
 
 router.post('/createUser', userController.createUser)
 
+router.delete('/deleteUser', userMiddlewares.auth, userController.deleteUser)
+
+
+
 router.get('/teste', userMiddlewares.auth, (request: any, response: any) => {
   return response.json('alele')
 })
