@@ -83,9 +83,59 @@ class UserController {
     }
   }
 
-  async deleteUser(request: any, response: Response) {
+  async deleteUser(request: any, response: any) {
+    try {
+      const userId = request.user
+      let userToBeDeleted
+      const users = await User.find()
 
-    console.log(request.teste)
+      users.forEach((user: IUser) => {
+        if (user._id === userId.user_id) {
+          userToBeDeleted = user
+        }
+      })
+
+      if (userToBeDeleted !== undefined) {
+        //@ts-ignore
+        await userToBeDeleted.remove()
+      } else {
+        return response.status(400).json({ message: `This user doesn't exists` })
+      }
+
+      return response.status(200).json({ message: 'Task deleted successfully' })
+    } catch (error) {
+      return response.status(500).json(error)
+    }
+  }
+
+  async updatePassword(request: any, response: any) {
+    const { password } = request.body
+    try {
+      const userId = request.user
+      let userToUpdate
+
+      if (!password) {
+        return response.status(400).json({ error: 'You must inform a password' })
+      }
+
+      const users = await User.find()
+
+      users.forEach((user: IUser) => {
+        if (user._id === userId.user_id) {
+          userToUpdate = user
+        }
+      })
+
+      //@ts-ignore
+      userToUpdate.password = await bcrypt.hash(password, 10)
+
+      //@ts-ignore
+      await userToUpdate.save()
+
+      return response.status(200).json({ message: 'User updated successfully' })
+    } catch (error) {
+      return response.status(500).json(error)
+    }
   }
 }
 

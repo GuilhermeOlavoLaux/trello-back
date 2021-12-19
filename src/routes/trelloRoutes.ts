@@ -15,6 +15,8 @@ router.post('/createUser', userController.createUser)
 
 router.delete('/deleteUser', userMiddlewares.auth, userController.deleteUser)
 
+router.put('/updatePassword', userMiddlewares.auth, userController.updatePassword)
+
 
 
 router.get('/teste', userMiddlewares.auth, (request: any, response: any) => {

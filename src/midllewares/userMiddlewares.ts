@@ -45,7 +45,7 @@ class UserMiddlewares {
         '1a7052a6-c711-4c8c-9107-cdc76700b630'
       )
       
-      request.teste = tokenPayload
+      request.user = tokenPayload
 
       return next()
     } catch (error) {
