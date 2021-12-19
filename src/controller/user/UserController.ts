@@ -38,7 +38,7 @@ class UserController {
             expiresIn: '1h'
           }
         )
-        return {token}
+        return { token }
       } else {
         throw new Error('Wrong password')
       }
@@ -81,6 +81,11 @@ class UserController {
         return response.status(400).json({ error: error.message })
       }
     }
+  }
+
+  async deleteUser(request: any, response: Response) {
+
+    console.log(request.teste)
   }
 }
 

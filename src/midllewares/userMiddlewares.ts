@@ -1,8 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { UserController } from '../controller/user/UserController'
-import { verify } from 'jsonwebtoken'
-
-const bcrypt = require('bcrypt')
+import { JwtPayload, verify } from 'jsonwebtoken'
+import { stringify } from 'uuid'
 
 class UserMiddlewares {
   async validateUserAndPassword(request: Request, response: Response, next: NextFunction) {
@@ -31,7 +30,7 @@ class UserMiddlewares {
       return response.status(500).json({ error: error.message })
     }
   }
-  async auth(request: Request, response: Response, next: NextFunction) {
+  async auth(request: any, response: Response, next: NextFunction) {
     const authToken = request.headers.authorization
 
     if (!authToken) {
@@ -41,7 +40,13 @@ class UserMiddlewares {
     const [, token] = authToken.split(' ')
 
     try {
-      verify(token, '1a7052a6-c711-4c8c-9107-cdc76700b630')
+      const tokenPayload: string | JwtPayload = verify(
+        token,
+        '1a7052a6-c711-4c8c-9107-cdc76700b630'
+      )
+      
+      request.teste = tokenPayload
+
       return next()
     } catch (error) {
       return response.status(401).json({
