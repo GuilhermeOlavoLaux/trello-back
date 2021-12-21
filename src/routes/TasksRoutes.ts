@@ -9,8 +9,8 @@ const userMiddlewares = new UserMiddlewares()
 
 tasksRouter.get('/tasks', userMiddlewares.auth, tasksController.getTasks)
 
-
 tasksRouter.put('/deleteTask/:taskId', userMiddlewares.auth, tasksController.deleteTask)
 
+tasksRouter.put('/addTask', userMiddlewares.auth, tasksController.addTask)
 
 export = tasksRouter
