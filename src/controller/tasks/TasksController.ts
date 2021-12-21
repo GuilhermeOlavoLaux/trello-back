@@ -2,6 +2,8 @@ import User from '../../model/User'
 
 import { Response } from 'express'
 
+import { v4 as uuid } from 'uuid'
+
 import { ITask, IUser } from '../../Types'
 
 class TasksController {
@@ -18,6 +20,30 @@ class TasksController {
     }
   }
 
+  async addTask(request: any, response: Response) {
+    try {
+      const userRequest = request.user
+      const { name, description } = request.body
+
+      const user = await User.findById(userRequest.user_id)
+
+      if (name && description) {
+        const task = {
+          name: name,
+          description: description
+        }
+        user.tasks.push(task)
+
+        await user.save()
+        return response.status(200).json({ message: 'Task added successfully' })
+      } else {
+        return response.status(422).json({ message: 'Missing name or description' })
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+
   async deleteTask(request: any, response: Response) {
     try {
       const userRequest = request.user
@@ -25,13 +51,17 @@ class TasksController {
 
       const user = await User.findById(userRequest.user_id)
 
-      const actualUserTasks = user.tasks.filter((task: ITask) => taskId !== task._id.toString())
+      if (taskId) {
+        const actualUserTasks = user.tasks.filter((task: ITask) => taskId !== task._id.toString())
 
-      user.tasks = actualUserTasks
+        user.tasks = actualUserTasks
 
-      await user.save()
+        await user.save()
+        return response.status(200).json({ message: 'Task deleted successfully' })
+      } else {
+        return response.status(422).json({ message: 'Missing task id' })
+      }
 
-      return response.status(200).json({ message: 'Task deleted successfully' })
     } catch (error: any) {
       throw new Error(error)
     }
