@@ -16,10 +16,6 @@ const userSchema = mongoose.Schema({
 
   tasks: [
     {
-      taskId: {
-        type: String,
-        required: true
-      },
       name: {
         type: String,
         required: true

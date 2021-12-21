@@ -6,7 +6,7 @@ interface IUser {
 }
 
 interface ITask {
-  taskId: string
+  _id: string
   name: string
   description: string
 }

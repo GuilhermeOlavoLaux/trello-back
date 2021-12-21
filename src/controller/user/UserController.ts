@@ -5,25 +5,17 @@ const bcrypt = require('bcrypt')
 
 import jwt from 'jsonwebtoken'
 
-import express, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 
 import { IUser } from '../../Types'
 
 class UserController {
-  async getUsers(request: Request, response: Response) {
-    try {
-      const users = await User.find()
-      return response.status(200).json({ users })
-    } catch (error: any) {
-      response.status(500).json({ error: error.message })
-    }
-  }
-
   async login(userName: string, password: string) {
     try {
       const users = await User.find()
 
       const user = users.find((user: IUser) => user.userName === userName)
+
       if (user === null || user === undefined) {
         throw new Error('User not found')
       }
@@ -76,7 +68,7 @@ class UserController {
       })
       try {
         await task.save()
-        return response.status(201).json({ message: 'user created successfully' })
+        return response.status(201).json({ message: 'User created successfully' })
       } catch (error: any) {
         return response.status(400).json({ error: error.message })
       }
@@ -85,24 +77,15 @@ class UserController {
 
   async deleteUser(request: any, response: any) {
     try {
-      const userId = request.user
-      let userToBeDeleted
-      const users = await User.find()
-
-      users.forEach((user: IUser) => {
-        if (user._id === userId.user_id) {
-          userToBeDeleted = user
-        }
-      })
+      const userToBeDeleted = await User.findById(request.user.user_id)
 
       if (userToBeDeleted !== undefined) {
-        //@ts-ignore
-        await userToBeDeleted.remove()
+        await User.findByIdAndRemove(request.user.user_id)
       } else {
         return response.status(400).json({ message: `This user doesn't exists` })
       }
 
-      return response.status(200).json({ message: 'Task deleted successfully' })
+      return response.status(200).json({ message: 'User deleted successfully' })
     } catch (error) {
       return response.status(500).json(error)
     }
@@ -111,25 +94,14 @@ class UserController {
   async updatePassword(request: any, response: any) {
     const { password } = request.body
     try {
-      const userId = request.user
-      let userToUpdate
-
       if (!password) {
         return response.status(400).json({ error: 'You must inform a password' })
       }
 
-      const users = await User.find()
+      const userToUpdate = await User.findById(request.user.user_id)
 
-      users.forEach((user: IUser) => {
-        if (user._id === userId.user_id) {
-          userToUpdate = user
-        }
-      })
-
-      //@ts-ignore
       userToUpdate.password = await bcrypt.hash(password, 10)
 
-      //@ts-ignore
       await userToUpdate.save()
 
       return response.status(200).json({ message: 'User updated successfully' })
