@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express'
 import { UserController } from '../controller/user/UserController'
 import { JwtPayload, verify } from 'jsonwebtoken'
-import { stringify } from 'uuid'
 
 class UserMiddlewares {
   async validateUserAndPassword(request: Request, response: Response, next: NextFunction) {
@@ -9,7 +8,7 @@ class UserMiddlewares {
       const { userName, password } = request.body
 
       if (!userName || !password) {
-        return response.status(400).json({ error: 'Missing name or password' })
+        return response.status(400).json({ error: 'Missing userName or password' })
       } else {
         return next()
       }

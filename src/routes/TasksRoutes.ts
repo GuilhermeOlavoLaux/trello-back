@@ -13,4 +13,8 @@ tasksRouter.put('/deleteTask/:taskId', userMiddlewares.auth, tasksController.del
 
 tasksRouter.put('/addTask', userMiddlewares.auth, tasksController.addTask)
 
+tasksRouter.put('/updateTask', userMiddlewares.auth, tasksController.updateTask)
+
+
+
 export = tasksRouter

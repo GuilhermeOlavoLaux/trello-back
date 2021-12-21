@@ -2,8 +2,6 @@ import User from '../../model/User'
 
 import { Response } from 'express'
 
-import { v4 as uuid } from 'uuid'
-
 import { ITask, IUser } from '../../Types'
 
 class TasksController {
@@ -44,6 +42,32 @@ class TasksController {
     }
   }
 
+  async updateTask(request: any, response: Response) {
+    try {
+      const userRequest = request.user
+      const { id, name, description } = request.body
+
+      const user = await User.findById(userRequest.user_id)
+
+      if (name && description && id) {
+        user.tasks.forEach((task: ITask) => {
+          if (task._id.toString() === id) {
+            task.name = name
+            task.description = description
+          }
+        })
+
+        await user.save()
+
+        return response.status(200).json({ message: 'Task updated successfully' })
+      } else {
+        return response.status(422).json({ message: 'Missing name, id or description' })
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+
   async deleteTask(request: any, response: Response) {
     try {
       const userRequest = request.user
@@ -62,7 +86,6 @@ class TasksController {
         return response.status(422).json({ message: 'Missing task id' })
       }
 
-      
     } catch (error: any) {
       throw new Error(error)
     }
