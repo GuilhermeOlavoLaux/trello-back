@@ -85,6 +85,7 @@ class TasksController {
       } else {
         return response.status(422).json({ message: 'Missing task id' })
       }
+
     } catch (error: any) {
       throw new Error(error)
     }
