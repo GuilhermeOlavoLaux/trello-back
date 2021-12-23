@@ -21,14 +21,15 @@ class TasksController {
   async addTask(request: any, response: Response) {
     try {
       const userRequest = request.user
-      const { name, description } = request.body
+      const { name, description, situation } = request.body
 
       const user = await User.findById(userRequest.user_id)
 
       if (name && description) {
         const task = {
           name: name,
-          description: description
+          description: description,
+          situation: situation
         }
         user.tasks.push(task)
 
@@ -45,7 +46,7 @@ class TasksController {
   async updateTask(request: any, response: Response) {
     try {
       const userRequest = request.user
-      const { id, name, description } = request.body
+      const { id, name, description, situation } = request.body
 
       const user = await User.findById(userRequest.user_id)
 
@@ -54,6 +55,7 @@ class TasksController {
           if (task._id.toString() === id) {
             task.name = name
             task.description = description
+            task.situation = situation
           }
         })
 

@@ -23,6 +23,10 @@ const userSchema = mongoose.Schema({
       description: {
         type: String,
         required: true
+      },
+      situation:{
+        type: String,
+        required: true
       }
     }
   ]

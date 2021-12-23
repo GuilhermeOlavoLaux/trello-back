@@ -9,6 +9,7 @@ interface ITask {
   _id: string
   name: string
   description: string
+  situation: string
 }
 
 
