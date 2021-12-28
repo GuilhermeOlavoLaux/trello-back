@@ -53,7 +53,7 @@ class UserController {
     users.forEach((user: IUser) => {
       if (user.userName === userName) {
         userCreationFlag = true
-      }
+      } 
     })
 
     if (userCreationFlag) {
