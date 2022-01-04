@@ -8,7 +8,7 @@ class UserMiddlewares {
       const { userName, password } = request.body
 
       if (!userName || !password) {
-        return response.status(400).json({ error: 'Missing userName or password' })
+        return response.status(400).json({ error: 'Preencha todos os campos 👩🏻‍💻' })
       } else {
         return next()
       }

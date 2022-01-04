@@ -17,7 +17,7 @@ class UserController {
       const user = users.find((user: IUser) => user.userName === userName)
 
       if (user === null || user === undefined) {
-        throw new Error('Este usuário não existe 👨🏻‍💻👩🏻‍💻')
+        throw ('Este usuário não existe 👨🏻‍💻👩🏻‍💻')
       }
       if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign(
@@ -32,7 +32,7 @@ class UserController {
         )
         return { token }
       } else {
-        throw new Error('Senha incorreta, tente novamente 👩🏻‍💻')
+        throw ('Senha incorreta, tente novamente 👩🏻‍💻')
       }
     } catch (error: any) {
       throw new Error(error)
