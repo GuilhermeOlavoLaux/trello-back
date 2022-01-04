@@ -17,7 +17,7 @@ class UserController {
       const user = users.find((user: IUser) => user.userName === userName)
 
       if (user === null || user === undefined) {
-        throw new Error('User not found')
+        throw new Error('Este usuário não existe 👨🏻‍💻👩🏻‍💻')
       }
       if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign(
@@ -32,7 +32,7 @@ class UserController {
         )
         return { token }
       } else {
-        throw new Error('Wrong password')
+        throw new Error('Senha incorreta, tente novamente 👩🏻‍💻')
       }
     } catch (error: any) {
       throw new Error(error)
@@ -45,7 +45,7 @@ class UserController {
     const users = await User.find()
 
     if (!userName || !password) {
-      return response.status(400).json({ error: 'Missing name or password' })
+      return response.status(400).json({ error: 'Preencha todos os campos 👨🏻‍💻' })
     }
 
     let userCreationFlag = false
@@ -53,11 +53,11 @@ class UserController {
     users.forEach((user: IUser) => {
       if (user.userName === userName) {
         userCreationFlag = true
-      } 
+      }
     })
 
     if (userCreationFlag) {
-      return response.status(400).json({ rror: 'This user already exists' })
+      return response.status(400).json({ error: 'Este usuário já existe, tente novamente 👨🏻‍💻' })
     } else {
       const hashedPassword = await bcrypt.hash(request.body.password, 10)
       const task = new User({
@@ -68,7 +68,7 @@ class UserController {
       })
       try {
         await task.save()
-        return response.status(201).json({ message: 'User created successfully' })
+        return response.status(201).json({ message: 'Usuário criado com sucesso 👩🏻‍💻' })
       } catch (error: any) {
         return response.status(400).json({ error: error.message })
       }
@@ -82,10 +82,10 @@ class UserController {
       if (userToBeDeleted !== undefined) {
         await User.findByIdAndRemove(request.user.user_id)
       } else {
-        return response.status(400).json({ message: `This user doesn't exists` })
+        return response.status(400).json({ message: `Este usuário não existe  👨🏻‍💻` })
       }
 
-      return response.status(200).json({ message: 'User deleted successfully' })
+      return response.status(200).json({ message: 'Usuário deletado com sucesso  👩🏻‍💻' })
     } catch (error) {
       return response.status(500).json(error)
     }
@@ -95,7 +95,7 @@ class UserController {
     const { password } = request.body
     try {
       if (!password) {
-        return response.status(400).json({ error: 'You must inform a password' })
+        return response.status(400).json({ error: 'Informe uma nova senha  👨🏻‍💻' })
       }
 
       const userToUpdate = await User.findById(request.user.user_id)
@@ -104,7 +104,7 @@ class UserController {
 
       await userToUpdate.save()
 
-      return response.status(200).json({ message: 'User updated successfully' })
+      return response.status(200).json({ message: 'Usuário atualizado com sucesso 👩🏻‍💻' })
     } catch (error) {
       return response.status(500).json(error)
     }
