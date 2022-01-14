@@ -4,6 +4,8 @@ import { Response } from 'express'
 
 import { ITask, IUser } from '../../Types'
 
+const { v4: uuid } = require('uuid')
+
 class TasksController {
   async getTasks(request: any, response: Response) {
     try {
@@ -27,6 +29,7 @@ class TasksController {
 
       if (name && description) {
         const task = {
+          _id: uuid(),
           name: name,
           description: description,
           situation: situation

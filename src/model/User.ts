@@ -16,6 +16,10 @@ const userSchema = mongoose.Schema({
 
   tasks: [
     {
+      _id: {
+        type: String,
+        required: true
+      },
       name: {
         type: String,
         required: true
@@ -24,7 +28,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
       },
-      situation:{
+      situation: {
         type: String,
         required: true
       }
