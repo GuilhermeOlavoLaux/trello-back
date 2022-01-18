@@ -13,8 +13,6 @@ Este projeto é um administrador de tarefas, que imita o funcionamento do Trello
 * TypeScript 
 * JavaScript
 * Bootstrap
-* JavaScript
-* JavaScript
 * Node
 * MongoDB
 * Express
