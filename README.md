@@ -23,7 +23,6 @@ Este projeto é um administrador de tarefas, que imita o funcionamento do Trello
 Clone o projeto e rode o comando:
 $ npm install
 ```
-
  ![](\src\assets\images\PaginaInicial.png)
  
  ![](\src\assets\images\Tarefas.png)
