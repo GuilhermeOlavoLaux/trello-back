@@ -16,7 +16,7 @@ userRouter.delete('/deleteUser', userMiddlewares.auth, userController.deleteUser
 userRouter.put('/updatePassword', userMiddlewares.auth, userController.updatePassword)
 
 userRouter.get('/testeAutenticacao', userMiddlewares.auth,(request: any, response: any) => {
-  return response.status(200).json('get funcionou')
+  return response.status(200).json('get funcionou ')
 })
 
 export = userRouter
