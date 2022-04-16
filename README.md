@@ -19,14 +19,12 @@ Este projeto é um administrador de tarefas, que imita o funcionamento do Trello
 
 ### 🔧 Instalação
 
-Uma série de exemplos passo-a-passo que informam o que você deve executar para ter um ambiente de desenvolvimento em execução.
-
-Diga como essa etapa será:
-
 ```
 Clone o projeto e rode o comando:
 $ npm install
 ```
+
+Adicione um arquivo .env com  um banco MongoDb válido. 
 
  ![](\src\assets\images\PaginaInicial.png)
  
